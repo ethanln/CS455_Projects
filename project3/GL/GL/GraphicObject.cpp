@@ -3,11 +3,16 @@
 
 using namespace std;
 
-GraphicObject::GraphicObject(string _object_uri)
+GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos)
 {
 	// parse obj file.
 	ObjectParser* parser = new ObjectParser();
 	parser->parse(_object_uri, this->faces);
+
+	this->orientation = _orientation;
+	this->x_pos = _x_pos;
+	this->y_pos = _y_pos;
+	this->z_pos = _z_pos;
 }
 
 vector<face> GraphicObject::getObjectFaces()
@@ -115,7 +120,7 @@ bool GraphicObject::loadTexture(string _texture_uri) {
 	return true;
 }
 
-void GraphicObject::display()
+void GraphicObject::display(matrix4 transformation)
 {
 	/* TEXTURES SETUP */
 	glEnable(GL_BLEND);
@@ -145,6 +150,51 @@ void GraphicObject::display()
 	glFlush();
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+void GraphicObject::add_object(GraphicObject obj)
+{
+	this->objects.push_back(obj);
+}
+
+void GraphicObject::set_orientation(float _orientation)
+{
+	this->orientation = _orientation;
+}
+
+void GraphicObject::set_x_pos(float _x_pos)
+{
+	this->x_pos = _x_pos;
+}
+
+void GraphicObject::set_y_pos(float _y_pos)
+{
+	this->y_pos = _y_pos;
+}
+
+void GraphicObject::set_z_pos(float _z_pos)
+{
+	this->z_pos = _z_pos;
+}
+
+float GraphicObject::get_orientation()
+{
+	return this->orientation;
+}
+
+float GraphicObject::get_x_pos()
+{
+	return this->x_pos;
+}
+
+float GraphicObject::get_y_pos()
+{
+	return this->y_pos;
+}
+
+float GraphicObject::get_z_pos()
+{
+	return this->z_pos;
 }
 
 GraphicObject::~GraphicObject()

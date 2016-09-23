@@ -23,8 +23,15 @@ class GraphicObject
 		vector<face> faces;
 		GLuint texId;
 
+		float orientation;
+		float x_pos;
+		float y_pos;
+		float z_pos;
+
+		vector<GraphicObject> objects;
+
 	public:
-		GraphicObject(string _object_uri);
+		GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos);
 
 		~GraphicObject();
 
@@ -32,7 +39,25 @@ class GraphicObject
 
 		bool loadTexture(string _texture_uri);
 
-		void display();
+		void display(matrix4 transformation);
+
+		void add_object(GraphicObject obj);
+
+		void set_orientation(float _orientation);
+
+		void set_x_pos(float _x_pos);
+
+		void set_y_pos(float _y_pos);
+		
+		void set_z_pos(float _z_pos);
+
+		float get_orientation();
+
+		float get_x_pos();
+
+		float get_y_pos();
+
+		float get_z_pos();
 };
 
 #endif

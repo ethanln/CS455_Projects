@@ -112,23 +112,57 @@ void graphics_pipeline::_translate(float x, float y, float z)
 
 void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, float far)
 {
-	//float ymax, xmax;
-	//ymax = near * tanf(fov * M_PI / 360.0f);
-	//xmax = ymax * aspect;
+	float ymax, xmax;
+	ymax = near * tanf((fov / 2.0f) * M_PI / 360.0f);
+	xmax = ymax * aspect;
 
-	//this->current_matrix->multiplyMatrix(this->_glhFrustumf(-xmax, xmax, -ymax, ymax, near, far));
-	
-	//
-	float f = 1.0f / tan((fov * M_PI) / 180.0f);
+	this->current_matrix->multiplyMatrix(this->_glhFrustumf(-xmax, xmax, -ymax, ymax, near, far));
+
+	/*
+	float f = 1.0f / tan(((fov / 2.0f) * M_PI) / 360.0f);
 	array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;
 	clip_matrix[0] = { f / aspect, 0.0f,	0.0f,							0.0f							};
 	clip_matrix[1] = { 0.0f,	   f,		0.0f,							0.0f							};
 	clip_matrix[2] = { 0.0f,	   0.0f,	(far + near) / (near - far),	(2 * far * near) / (near - far) };
 	clip_matrix[3] = { 0.0f,	   0.0f,	-1.0f,							0.0f							};
 
-	matrix4 mat(clip_matrix);
+	array<array<float, matrix4::DIM>, matrix4::DIM> pers_matrix;
+	pers_matrix[0] = { 1.0f, 0.0f,	0.0f,		0.0f };
+	pers_matrix[1] = { 0.0f, 1.0f,	0.0f,		0.0f };
+	pers_matrix[2] = { 0.0f, 0.0f,	0.0f,		0.0f };
+	pers_matrix[3] = { 0.0f, 0.0f, -1.0f / 1.0f, 1.0f };
 
-	this->current_matrix->multiplyMatrix(mat);
+	float x = 1.0f * tan((((fov / 2.0f) * M_PI) / 360.0f));
+
+	array<array<float, matrix4::DIM>, matrix4::DIM> trans_matrix;
+	trans_matrix[0] = { 1.0f, 0.0f,	0.0f, x };
+	trans_matrix[1] = { 0.0f, 1.0f,	0.0f, x };
+	trans_matrix[2] = { 0.0f, 0.0f,	1.0f, 0.0f };
+	trans_matrix[3] = { 0.0f, 0.0f,  0.0f, 1.0f };
+
+	float sX = 0.1f / (2.0f * x);
+	float sY = 0.1f / (2.0f * x);
+
+	array<array<float, matrix4::DIM>, matrix4::DIM> scale_matrix;
+	scale_matrix[0] = { sX,	 0.0f,	0.0f, 0.0f };
+	scale_matrix[1] = { 0.0f, sY,	0.0f, 0.0f };
+	scale_matrix[2] = { 0.0f, 0.0f,	1.0f, 0.0f };
+	scale_matrix[3] = { 0.0f, 0.0f,  0.0f, 1.0f };
+
+	array<array<float, matrix4::DIM>, matrix4::DIM> origin_matrix;
+	origin_matrix[0] = { 1.0f, 0.0f,	0.0f, 0.0f };
+	origin_matrix[1] = { 0.0f, 1.0f,	0.0f, 0.0f };
+	origin_matrix[2] = { 0.0f, 0.0f,	1.0f, 0.0f };
+	origin_matrix[3] = { 0.0f, 0.0f,	0.0f, 1.0f };
+
+	matrix4 mat(origin_matrix);
+	//mat.multiplyMatrix(scale_matrix);
+	//mat.multiplyMatrix(trans_matrix);
+	//mat.multiplyMatrix(pers_matrix);
+	mat.multiplyMatrix(clip_matrix);
+
+	this->current_matrix->multiplyMatrix(mat);*/
+
 	//
 	//
 	// TODO: TEST
@@ -149,6 +183,7 @@ void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, flo
 	this->current_matrix->multiplyMatrix(mat);*/
 }
 
+// MAY WANT TO DELETE THIS SECTION OF CODE
 matrix4 graphics_pipeline::_glhFrustumf(float left, float right, float bottom, float top, float znear, float zfar)
 {
 	float temp, temp2, temp3, temp4;
@@ -198,9 +233,9 @@ glm::vec4 graphics_pipeline::_transform(glm::vec4 coordinates)
 glm::vec3 graphics_pipeline::_to_screen(glm::vec4 transformed_coordinates)
 {
 	array<array<float, 3>, 3> screen_matrix;
-	screen_matrix[0] = { 2.0f / 2.0f,	 0.0f,			    1.0f / 2.0f };
-	screen_matrix[1] = { 0.0f,           2.0f / 2.0f,		1.0f / 2.0f };
-	screen_matrix[2] = { 0.0f,		     0.0f,				1.0f        };
+	screen_matrix[0] = { 1000.0f / 2.0f,	 0.0f,			    1000.0f / 2.0f };
+	screen_matrix[1] = { 0.0f,				1000.0f / 2.0f,		1000.0f / 2.0f };
+	screen_matrix[2] = { 0.0f,				0.0f,				1.0f        };
 
 	float w = transformed_coordinates.w;
 	float transformed_coor_vec[3] = { transformed_coordinates.x / w, transformed_coordinates.y / w, 1.0f};
