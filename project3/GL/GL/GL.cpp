@@ -33,15 +33,15 @@ camera* cam;
 void init(int argc, char** argv);
 void updateView();
 
-void setupWindow(int argc, char** argv,																									/* setup display window. */															
+void setupWindow(int argc, char** argv,																																					/* setup display window. */															
 	int _window_width, int _window_height,
 	int _window_origin_x, int _window_origin_y,
 	string title);
 
-GraphicObject createObject(string _object_uri, string _texture_file, float orientation, float x_pos, float y_pos, float z_pos);			/* Instantiate new graphics object. */
-void draw();																															/* Draw all objects. */
-void GLKeyDowns(unsigned char key, int x, int y);																						/* Keyboard event handler. */
-void GLMouseMovements(int x, int y);																									/* Mouse movement event handler*/
+GraphicObject createObject(string _object_uri, string _texture_file, float orientation, float x_pos, float y_pos, float z_pos, float scale_x, float scale_y, float scale_z);			/* Instantiate new graphics object. */
+void draw();																																											/* Draw all objects. */
+void GLKeyDowns(unsigned char key, int x, int y);																																		/* Keyboard event handler. */
+void GLMouseMovements(int x, int y);																																					/* Mouse movement event handler*/
 
 
 /********************************/
@@ -54,11 +54,19 @@ int main(int argc, char **argv)
 	init(argc, argv);
 
 	// SET UP OBJECTS:
-    objects.push_back(createObject("objects/crayonbox-color-green.obj", "objects/greenCrayon.bmp", 0.0f, 10.0f, 10.0f, 10.0f));
-	//createObject("objects/car.obj", "objects/car.bmp");
+    //objects.push_back(createObject("objects/crayonbox-color-green.obj", "objects/greenCrayon.bmp", 20.0f, 10.0f, 0.0f, 0.0f));
+	GraphicObject car = createObject("objects/car.obj", "objects/car.bmp", -20.0f, 0.0f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f);
+	car.add_object(createObject("objects/tire.obj", "objects/tire.bmp", 0.0f, 0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f));
+	car.add_object(createObject("objects/tire.obj", "objects/tire.bmp", 0.0f, 0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f));
+
+	car.add_object(createObject("objects/tire.obj", "objects/tire.bmp", 180.0f, -0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f));
+	car.add_object(createObject("objects/tire.obj", "objects/tire.bmp", 180.0f, -0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f));
+
 	//createObject("objects/ParkingLot.obj", "objects/ParkingLot.bmp");
 	//createObject("objects/crayonbox.obj", "objects/CrayonBox2.bmp");
 	//createObject("objects/crayonbox-different.obj", "objects/CrayonBox2.bmp");
+
+	objects.push_back(car);
 
 	// SET UP EVENT HANDLERS:
 	glutKeyboardFunc(GLKeyDowns);
@@ -85,7 +93,9 @@ void init(int argc, char** argv)
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	/*  initialize viewing values */
-	cam = new camera(0.0f, 0.0f, 0.0f, -40.0f);
+	//cam = new camera(-114.0f, -6.98902798f, 0.0f, 3.35688090f); // FRONT
+	cam = new camera(-69.0f, -5.29914522f, 0.0f, -2.22203946f); // LEFT SIDE
+	//cam = new camera(-253.0f, 4.76900959f, 0.0f, 1.87358809f); // RIGHT SIDE
 
 	/* BEGIN MY PIPELINE */
 	graphics_pipeline::mode(matrix_mode::PROJECTION_GL);
@@ -144,9 +154,9 @@ void setupWindow(int argc, char** argv,
 /********************************/
 /*	   INSTANTIATES OBJECTS		*/
 /********************************/
-GraphicObject createObject(string _object_uri, string _texture_file, float orientation, float x_pos, float y_pos, float z_pos)
+GraphicObject createObject(string _object_uri, string _texture_file, float orientation, float x_pos, float y_pos, float z_pos, float scale_x, float scale_y, float scale_z)
 {
-	GraphicObject o (_object_uri, orientation, x_pos, y_pos, z_pos);
+	GraphicObject o (_object_uri, orientation, x_pos, y_pos, z_pos, scale_x, scale_y, scale_z);
 	o.loadTexture(_texture_file);
 	return o;
 }
@@ -161,8 +171,7 @@ void draw()
 
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
-		matrix4 identity;																		/*Initialize draw with an identity matrix*/
-		objects.at(i).display(identity);														/*Draw object*/
+		objects.at(i).display();														/*Draw object*/
 	}
 }
 

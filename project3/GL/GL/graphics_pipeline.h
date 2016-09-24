@@ -35,6 +35,8 @@ class graphics_pipeline
 
 		void _translate(float x, float y, float z);
 
+		void _scale(float scale_x, float scale_y, float scale_z);
+
 		void _gluPerspective(float fov, float aspect, float near, float far);
 
 		matrix4 _glhFrustumf(float left, float right, float bottom, float top, float znear, float zfar);
@@ -60,6 +62,8 @@ class graphics_pipeline
 		static void rotate(float orientation, float x, float y, float z);
 
 		static void translate(float x, float y, float z);
+
+		static void scale(float scale_x, float scale_y, float scale_z);
 
 		static void gluPerspective(float fov, float aspect, float near, float far);
 

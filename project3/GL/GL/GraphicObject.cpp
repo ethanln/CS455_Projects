@@ -3,7 +3,9 @@
 
 using namespace std;
 
-GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos)
+static const float M_PI = 3.141592653589793238463;
+
+GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z)
 {
 	// parse obj file.
 	ObjectParser* parser = new ObjectParser();
@@ -13,6 +15,10 @@ GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_po
 	this->x_pos = _x_pos;
 	this->y_pos = _y_pos;
 	this->z_pos = _z_pos;
+
+	this->scale_x = _scale_x;
+	this->scale_y = _scale_y;
+	this->scale_z = _scale_z;
 }
 
 vector<face> GraphicObject::getObjectFaces()
@@ -120,14 +126,16 @@ bool GraphicObject::loadTexture(string _texture_uri) {
 	return true;
 }
 
-void GraphicObject::display(matrix4 transformation)
+void GraphicObject::display()
 {
+	this->setup_object_transformation();
 	/* TEXTURES SETUP */
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, this->texId);
-	//glDepthFunc(GL_EQUAL);
+	//glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_EQUAL);
 
 	for (unsigned int i = 0; i < this->faces.size(); i++)
 	{
@@ -150,6 +158,13 @@ void GraphicObject::display(matrix4 transformation)
 	glFlush();
 
 	glDisable(GL_TEXTURE_2D);
+
+	for (unsigned int i = 0; i < this->objects.size(); i++)
+	{
+		this->objects.at(i).display();
+	}
+
+	this->inverse_object_transformation();						// inverse object transformation.
 }
 
 void GraphicObject::add_object(GraphicObject obj)
@@ -195,6 +210,50 @@ float GraphicObject::get_y_pos()
 float GraphicObject::get_z_pos()
 {
 	return this->z_pos;
+}
+
+void GraphicObject::set_scale_x(float _scale_x)
+{
+	this->scale_x = _scale_x;
+}
+
+void GraphicObject::set_scale_y(float _scale_y)
+{
+	this->scale_y = _scale_y;
+}
+
+void GraphicObject::set_scale_z(float _scale_z)
+{
+	this->scale_x = _scale_z;
+}
+
+float GraphicObject::get_scale_x()
+{
+	return this->scale_x;
+}
+
+float GraphicObject::get_scale_y()
+{
+	return this->scale_y;
+}
+
+float GraphicObject::get_scale_z()
+{
+	return this->scale_z;
+}
+
+void GraphicObject::setup_object_transformation()
+{
+	graphics_pipeline::translate(this->x_pos, this->y_pos, this->z_pos);
+	graphics_pipeline::rotate(((this->orientation * M_PI) / 180.0f), 0.0f, 1.0f, 0.0f);
+	graphics_pipeline::scale(this->scale_x, this->scale_y, this->scale_z);
+}
+
+void GraphicObject::inverse_object_transformation()
+{
+	graphics_pipeline::scale(1.0f / this->scale_x, 1.0f / this->scale_y, 1.0f / this->scale_z);
+	graphics_pipeline::rotate(-((this->orientation * M_PI) / 180.0f), 0.0f, 1.0f, 0.0f);
+	graphics_pipeline::translate(-this->x_pos, -this->y_pos, -this->z_pos);
 }
 
 GraphicObject::~GraphicObject()

@@ -28,10 +28,18 @@ class GraphicObject
 		float y_pos;
 		float z_pos;
 
+		float scale_x;
+		float scale_y;
+		float scale_z;
+
 		vector<GraphicObject> objects;
 
+		void setup_object_transformation();
+
+		void inverse_object_transformation();
+
 	public:
-		GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos);
+		GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z);
 
 		~GraphicObject();
 
@@ -39,7 +47,7 @@ class GraphicObject
 
 		bool loadTexture(string _texture_uri);
 
-		void display(matrix4 transformation);
+		void display();
 
 		void add_object(GraphicObject obj);
 
@@ -58,6 +66,18 @@ class GraphicObject
 		float get_y_pos();
 
 		float get_z_pos();
+
+		void set_scale_x(float _scale_x);
+
+		void set_scale_y(float _scale_y);
+
+		void set_scale_z(float _scale_z);
+
+		float get_scale_x();
+
+		float get_scale_y();
+
+		float get_scale_z();
 };
 
 #endif

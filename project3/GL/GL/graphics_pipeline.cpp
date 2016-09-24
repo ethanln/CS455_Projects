@@ -74,6 +74,17 @@ void graphics_pipeline::_loadIdentityMatrix()
 
 void graphics_pipeline::_rotate(float orientation, float x, float y, float z)
 {
+	// X ROTATION MATRIX
+	if (x == 1.0f)
+	{
+		array<array<float, matrix4::DIM>, matrix4::DIM> rotation_matrix_x;
+		rotation_matrix_x[0] = { 1.0f,  0.0f,					 0.0f,						0.0f };
+		rotation_matrix_x[1] = { 0.0f,	(float)cos(orientation), (float)-sin(orientation),	0.0f };
+		rotation_matrix_x[2] = { 0.0f,  (float)sin(orientation), (float)cos(orientation),	0.0f };
+		rotation_matrix_x[3] = { 0.0f,	0.0f,					 0.0f,						1.0f };
+		this->current_matrix->multiplyMatrix(rotation_matrix_x);
+	}
+
 	// Y ROTATION MATRIX
 	if (y == 1.0f)
 	{
@@ -85,27 +96,38 @@ void graphics_pipeline::_rotate(float orientation, float x, float y, float z)
 		this->current_matrix->multiplyMatrix(rotation_matrix_y);
 	}
 
-	// X ROTATION MATRIX
-	if(x == 1.0f)
+	// Z ROTATION MATRIX
+	if (z == 1.0f)
 	{
 		array<array<float, matrix4::DIM>, matrix4::DIM> rotation_matrix_x;
-		rotation_matrix_x[0] = { 1.0f,  0.0f,					 0.0f,						0.0f };
-		rotation_matrix_x[1] = { 0.0f,	(float)cos(orientation), (float)-sin(orientation),	0.0f };
-		rotation_matrix_x[2] = { 0.0f,  (float)sin(orientation), (float)cos(orientation),	0.0f };
-		rotation_matrix_x[3] = { 0.0f,	0.0f,					 0.0f,						1.0f };
+		rotation_matrix_x[0] = { (float)cos(orientation),   (float)-sin(orientation),	0.0f,	0.0f };
+		rotation_matrix_x[1] = { (float)sin(orientation),	(float)cos(orientation),	0.0f,	0.0f };
+		rotation_matrix_x[2] = { 0.0f,						0.0f,						1.0f,	0.0f };
+		rotation_matrix_x[3] = { 0.0f,						0.0f,						0.0f,	1.0f };
 		this->current_matrix->multiplyMatrix(rotation_matrix_x);
 	}
 }
 
 void graphics_pipeline::_translate(float x, float y, float z)
 {
-	// TODO: TEST
 	array<array<float, matrix4::DIM>, matrix4::DIM> translated_matrix;
 	translated_matrix[0] = { 1.0f, 0.0f, 0.0f, x	};
 	translated_matrix[1] = { 0.0f, 1.0f, 0.0f, y	};
 	translated_matrix[2] = { 0.0f, 0.0f, 1.0f, z	};
 	translated_matrix[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	matrix4 mat(translated_matrix);
+
+	this->current_matrix->multiplyMatrix(mat);
+}
+
+void graphics_pipeline::_scale(float scale_x, float scale_y, float scale_z)
+{
+	array<array<float, matrix4::DIM>, matrix4::DIM> scale_matrix;
+	scale_matrix[0] = { scale_x, 0.0f,	 0.0f,		0.0f };
+	scale_matrix[1] = { 0.0f,	scale_y, 0.0f,		0.0f };
+	scale_matrix[2] = { 0.0f,	0.0f,	 scale_z,	0.0f };
+	scale_matrix[3] = { 0.0f,	0.0f,	 0.0f,		1.0f };
+	matrix4 mat(scale_matrix);
 
 	this->current_matrix->multiplyMatrix(mat);
 }
@@ -232,10 +254,10 @@ glm::vec4 graphics_pipeline::_transform(glm::vec4 coordinates)
 
 glm::vec3 graphics_pipeline::_to_screen(glm::vec4 transformed_coordinates)
 {
-	array<array<float, 3>, 3> screen_matrix;
-	screen_matrix[0] = { 1000.0f / 2.0f,	 0.0f,			    1000.0f / 2.0f };
-	screen_matrix[1] = { 0.0f,				1000.0f / 2.0f,		1000.0f / 2.0f };
-	screen_matrix[2] = { 0.0f,				0.0f,				1.0f        };
+	//array<array<float, 3>, 3> screen_matrix;
+	//screen_matrix[0] = { 1000.0f / 2.0f,	 0.0f,			    1000.0f / 2.0f };
+	//screen_matrix[1] = { 0.0f,				1000.0f / 2.0f,		1000.0f / 2.0f };
+	//screen_matrix[2] = { 0.0f,				0.0f,				1.0f        };
 
 	float w = transformed_coordinates.w;
 	float transformed_coor_vec[3] = { transformed_coordinates.x / w, transformed_coordinates.y / w, 1.0f};
@@ -280,6 +302,11 @@ void graphics_pipeline::rotate(float orientation, float x, float y, float z)
 void graphics_pipeline::translate(float x, float y, float z)
 {
 	graphics_pipeline::instance()->_translate(x, y, z);
+}
+
+void graphics_pipeline::scale(float scale_x, float scale_y, float scale_z)
+{
+	graphics_pipeline::instance()->_scale(scale_x, scale_y, scale_z);
 }
 
 void graphics_pipeline::gluPerspective(float fov, float aspect, float near, float far)
