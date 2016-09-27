@@ -45,6 +45,20 @@ public:
 
 	bool parse(string file_path, vector<face> &faces);
 
+	bool parse(string file_path);
+
+	GLfloat* get_vertex_data_array();
+
+	GLfloat* get_uv_data_array();
+
+	GLfloat* get_normal_data_array();
+
+	GLushort* get_vertex_index_array();
+
+	GLushort* get_uv_index_array();
+
+	GLushort* get_normal_index_array();
+
 	void print_info(std::ostream &out);
 
 };

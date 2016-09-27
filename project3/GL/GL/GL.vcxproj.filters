@@ -54,6 +54,21 @@
     <ClInclude Include="graphics_pipeline.h">
       <Filter>Source Files\setup</Filter>
     </ClInclude>
+    <ClInclude Include="math_ext.h">
+      <Filter>Source Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Wheel.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFactory.h">
+      <Filter>Source Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Car.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ParkingLot.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -79,6 +94,21 @@
     </ClCompile>
     <ClCompile Include="graphics_pipeline.cpp">
       <Filter>Source Files\setup</Filter>
+    </ClCompile>
+    <ClCompile Include="math_ext.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Wheel.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFactory.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="ParkingLot.cpp">
+      <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

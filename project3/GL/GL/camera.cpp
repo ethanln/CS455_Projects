@@ -3,9 +3,12 @@
 
 using namespace std;
 
-camera::camera(float _orientation, float _cam_x, float _cam_y, float _cam_z)
+camera::camera(float _orientation_x, float _orientation_y, float _orientation_z, float _cam_x, float _cam_y, float _cam_z)
 {
-	this->orientation = _orientation;
+	this->orientation_x = _orientation_x;
+	this->orientation_y = _orientation_y;
+	this->orientation_z = _orientation_z;
+
 	this->cam_x = _cam_x;
 	this->cam_y = _cam_y;
 	this->cam_z = _cam_z;
@@ -14,11 +17,6 @@ camera::camera(float _orientation, float _cam_x, float _cam_y, float _cam_z)
 camera::~camera()
 {
 
-}
-
-float camera::getOrientation()
-{
-	return this->orientation;
 }
 
 float camera::getCamX()
@@ -58,7 +56,39 @@ void camera::setCamZ(float _cam_z)
 	this->cam_z = _cam_z;
 }
 
-void camera::setOrientation(float _orientation)
+float camera::getOrientationX()
 {
-	this->orientation = _orientation;
+	return this->orientation_x;
+}
+
+float camera::getOrientationY()
+{
+	return this->orientation_y;
+}
+
+float camera::getOrientationZ()
+{
+	return this->orientation_z;
+}
+
+void camera::setOrientation(float _orientation_x, float _orientation_y, float _orientation_z)
+{
+	this->orientation_x = _orientation_x;
+	this->orientation_y = _orientation_y;
+	this->orientation_z = _orientation_z;
+}
+
+void camera::setOrientationX(float _orientation_x)
+{
+	this->orientation_x = _orientation_x;
+}
+
+void camera::setOrientationY(float _orientation_y)
+{
+	this->orientation_y = _orientation_y;
+}
+
+void camera::setOrientationZ(float _orientation_z)
+{
+	this->orientation_z = _orientation_z;
 }

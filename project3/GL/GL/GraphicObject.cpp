@@ -5,11 +5,13 @@ using namespace std;
 
 static const float M_PI = 3.141592653589793238463;
 
-GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z)
+GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z, GraphicObjectType _type)
 {
 	// parse obj file.
 	ObjectParser* parser = new ObjectParser();
 	parser->parse(_object_uri, this->faces);
+
+	//this->initializeVertexData(_object_uri);
 
 	this->orientation = _orientation;
 	this->x_pos = _x_pos;
@@ -19,11 +21,25 @@ GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_po
 	this->scale_x = _scale_x;
 	this->scale_y = _scale_y;
 	this->scale_z = _scale_z;
+
+	this->type = _type;
 }
 
 vector<face> GraphicObject::getObjectFaces()
 {
 	return this->faces;
+}
+
+void GraphicObject::initializeVertexData(string _object_uri)
+{
+	ObjectParser* parser = new ObjectParser();
+	parser->parse(_object_uri);
+
+	this->objectVertexArrayData = parser->get_vertex_data_array();
+	this->objectVertexIndices = parser->get_vertex_index_array();
+
+	this->objectUVArrayData = parser->get_uv_data_array();
+	this->objectUVIndices = parser->get_uv_index_array();
 }
 
 bool GraphicObject::loadTexture(string _texture_uri) {
@@ -126,16 +142,36 @@ bool GraphicObject::loadTexture(string _texture_uri) {
 	return true;
 }
 
-void GraphicObject::display()
+bool GraphicObject::buildBuffer()
+{
+	glGenBuffers(1, &this->objectBufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, this->objectBufferId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(this->objectVertexArrayData), this->objectVertexArrayData, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	
+	// DRAW:
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(this->objectVertexArrayData));
+	return true;
+}
+
+void GraphicObject::display(camera cam)
 {
 	this->setup_object_transformation();
+
+	for (unsigned int i = 0; i < this->objects.size(); i++)
+	{
+		this->objects.at(i)->display(cam);
+	}
+
 	/* TEXTURES SETUP */
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, this->texId);
-	//glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_EQUAL);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	for (unsigned int i = 0; i < this->faces.size(); i++)
 	{
@@ -148,7 +184,7 @@ void GraphicObject::display()
 				glm::vec3 screen_vec = graphics_pipeline::to_screen(transformed_vec);
 
 				glTexCoord2f(faceMaterial.at(j).uv.x, faceMaterial.at(j).uv.y);
-				//glVertex3f(faceMaterial.at(j).vertex.x, faceMaterial.at(j).vertex.y, faceMaterial.at(j).vertex.z);
+				//glVertex3f(transformed_vec.x, transformed_vec.y, transformed_vec.z);
 				//glNormal3f(faceMaterial.at(j).normal.x, faceMaterial.at(j).normal.y, faceMaterial.at(j).normal.z);
 				glVertex2f(screen_vec.x, screen_vec.y);
 			}
@@ -159,15 +195,10 @@ void GraphicObject::display()
 
 	glDisable(GL_TEXTURE_2D);
 
-	for (unsigned int i = 0; i < this->objects.size(); i++)
-	{
-		this->objects.at(i).display();
-	}
-
 	this->inverse_object_transformation();						// inverse object transformation.
 }
 
-void GraphicObject::add_object(GraphicObject obj)
+void GraphicObject::add_object(GraphicObject* obj)
 {
 	this->objects.push_back(obj);
 }

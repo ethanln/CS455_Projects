@@ -140,6 +140,15 @@ void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, flo
 
 	this->current_matrix->multiplyMatrix(this->_glhFrustumf(-xmax, xmax, -ymax, ymax, near, far));
 
+	/*array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;
+	clip_matrix[0] = { 1000.0f / 2.0f,	0.0f,				0.0f,							4.0f + (1000.0f / 2.0f) };
+	clip_matrix[1] = { 0.0f,		   1000.0f / 2.0f,		0.0f,							4.0f + (1000.0f / 2.0f) };
+	clip_matrix[2] = { 0.0f,			0.0f,				far - near,						near };
+	clip_matrix[3] = { 0.0f,			0.0f,				0.0f,							1.0f };
+	matrix4 clip(clip_matrix);
+
+	//this->current_matrix->multiplyMatrix(clip);*/
+
 	/*
 	float f = 1.0f / tan(((fov / 2.0f) * M_PI) / 360.0f);
 	array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;

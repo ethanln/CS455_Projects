@@ -14,14 +14,33 @@
 #include <GLFW\glfw3.h>
 #include "ObjectParser.h"
 #include "SOIL.h"
+#include "camera.h"
 
 using namespace std;
 
+enum GraphicObjectType
+{
+	WHEEL,
+	CAR,
+	PARKING_LOT,
+	CRAYON_BOX,
+	CRAYON
+};
+
 class GraphicObject
 {
-	private:
+	protected:
 		vector<face> faces;
 		GLuint texId;
+		GLuint objectBufferId;
+		GLuint indexBufferId;
+
+		GLfloat* objectVertexArrayData;
+		GLfloat* objectUVArrayData;
+		GLushort* objectVertexIndices;
+		GLushort* objectUVIndices;
+
+		GraphicObjectType type;
 
 		float orientation;
 		float x_pos;
@@ -32,14 +51,16 @@ class GraphicObject
 		float scale_y;
 		float scale_z;
 
-		vector<GraphicObject> objects;
+		vector<GraphicObject*> objects;
 
 		void setup_object_transformation();
 
 		void inverse_object_transformation();
 
+		void initializeVertexData(string _object_uri);
+
 	public:
-		GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z);
+		GraphicObject(string _object_uri, float _orientation, float _x_pos, float _y_pos, float _z_pos, float _scale_x, float _scale_y, float _scale_z, GraphicObjectType _type);
 
 		~GraphicObject();
 
@@ -47,9 +68,11 @@ class GraphicObject
 
 		bool loadTexture(string _texture_uri);
 
-		void display();
+		bool buildBuffer();
 
-		void add_object(GraphicObject obj);
+		void display(camera cam);
+
+		void add_object(GraphicObject* obj);
 
 		void set_orientation(float _orientation);
 
