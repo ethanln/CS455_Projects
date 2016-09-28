@@ -45,7 +45,6 @@ graphics_pipeline::~graphics_pipeline()
 
 void graphics_pipeline::_mode(matrix_mode mode)
 {
-	// TODO: TEST
 	if (mode == matrix_mode::PROJECTION_GL)
 	{
 		this->current_matrix = this->projection;
@@ -132,34 +131,39 @@ void graphics_pipeline::_scale(float scale_x, float scale_y, float scale_z)
 
 void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, float far)
 {
-	float ymax, xmax;
-	ymax = near * tanf((fov / 2.0f) * M_PI / 360.0f);
-	xmax = ymax * aspect;
+	//float ymax, xmax;
+	//ymax = near * tanf((fov / 2.0f) * M_PI / 360.0f);
+	//xmax = ymax * aspect;
 
-	this->current_matrix->multiplyMatrix(this->_glhFrustumf(-xmax, xmax, -ymax, ymax, near, far));
+	//this->current_matrix->multiplyMatrix(this->_glhFrustumf(-xmax, xmax, -ymax, ymax, near, far));
+	
+	float x = atan(fov / 2.0f);
+	float y = atan(fov / 2.0f);
+	float z = -(far + near) / (far - near);
+	float t = -(2.0f * near * far) / (far - near);
 
-	/*array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;
-	clip_matrix[0] = { 1000.0f / 2.0f,	0.0f,				0.0f,							4.0f + (1000.0f / 2.0f) };
-	clip_matrix[1] = { 0.0f,		   1000.0f / 2.0f,		0.0f,							4.0f + (1000.0f / 2.0f) };
-	clip_matrix[2] = { 0.0f,			0.0f,				far - near,						near };
-	clip_matrix[3] = { 0.0f,			0.0f,				0.0f,							1.0f };
+	array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;
+	clip_matrix[0] = { x * aspect,		0.0f,		0.0f,		0.0f };
+	clip_matrix[1] = { 0.0f,	y * aspect,			0.0f,		0.0f };
+	clip_matrix[2] = { 0.0f,	0.0f,		z,			t	 };
+	clip_matrix[3] = { 0.0f,	0.0f,		-1.0f,		0.0f };
 	matrix4 clip(clip_matrix);
 
-	//this->current_matrix->multiplyMatrix(clip);*/
+	this->current_matrix->multiplyMatrix(clip);
 
 	/*
 	float f = 1.0f / tan(((fov / 2.0f) * M_PI) / 360.0f);
 	array<array<float, matrix4::DIM>, matrix4::DIM> clip_matrix;
-	clip_matrix[0] = { f / aspect, 0.0f,	0.0f,							0.0f							};
-	clip_matrix[1] = { 0.0f,	   f,		0.0f,							0.0f							};
-	clip_matrix[2] = { 0.0f,	   0.0f,	(far + near) / (near - far),	(2 * far * near) / (near - far) };
-	clip_matrix[3] = { 0.0f,	   0.0f,	-1.0f,							0.0f							};
+	clip_matrix[0] = { f / aspect, 0.0f,			0.0f,							0.0f							};
+	clip_matrix[1] = { 0.0f,	   f / aspect,		0.0f,							0.0f							};
+	clip_matrix[2] = { 0.0f,	   0.0f,			(far + near) / (near - far),	(2 * far * near) / (near - far) };
+	clip_matrix[3] = { 0.0f,	   0.0f,			-1.0f,							0.0f							};
 
 	array<array<float, matrix4::DIM>, matrix4::DIM> pers_matrix;
 	pers_matrix[0] = { 1.0f, 0.0f,	0.0f,		0.0f };
 	pers_matrix[1] = { 0.0f, 1.0f,	0.0f,		0.0f };
 	pers_matrix[2] = { 0.0f, 0.0f,	0.0f,		0.0f };
-	pers_matrix[3] = { 0.0f, 0.0f, -1.0f / 1.0f, 1.0f };
+	pers_matrix[3] = { 0.0f, 0.0f, -1.0f / 15.0f, 1.0f };
 
 	float x = 1.0f * tan((((fov / 2.0f) * M_PI) / 360.0f));
 
@@ -187,7 +191,7 @@ void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, flo
 	matrix4 mat(origin_matrix);
 	//mat.multiplyMatrix(scale_matrix);
 	//mat.multiplyMatrix(trans_matrix);
-	//mat.multiplyMatrix(pers_matrix);
+	mat.multiplyMatrix(pers_matrix);
 	mat.multiplyMatrix(clip_matrix);
 
 	this->current_matrix->multiplyMatrix(mat);*/
@@ -262,23 +266,9 @@ glm::vec4 graphics_pipeline::_transform(glm::vec4 coordinates)
 
 glm::vec3 graphics_pipeline::_to_screen(glm::vec4 transformed_coordinates)
 {
-	//array<array<float, 3>, 3> screen_matrix;
-	//screen_matrix[0] = { 1000.0f / 2.0f,	 0.0f,			    1000.0f / 2.0f };
-	//screen_matrix[1] = { 0.0f,				1000.0f / 2.0f,		1000.0f / 2.0f };
-	//screen_matrix[2] = { 0.0f,				0.0f,				1.0f        };
-
 	float w = transformed_coordinates.w;
 	float transformed_coor_vec[3] = { transformed_coordinates.x / w, transformed_coordinates.y / w, 1.0f};
-	
 
-	//float new_vector[3] = {0.0f, 0.0f, 0.0f};
-	//for (int i = 0; i < 3; i++) {
-	//	for (int j = 0; j < 3; j++) {
-	//		new_vector[i] += transformed_coor_vec[j] * screen_matrix[i][j];
-	//	}
-	//}
-
-	//glm::vec3 screen_vec(new_vector[0], new_vector[1], new_vector[2]);
 	glm::vec3 screen_vec(transformed_coor_vec[0], transformed_coor_vec[1], transformed_coor_vec[2]);
 	return screen_vec;
 }

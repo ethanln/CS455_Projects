@@ -195,10 +195,11 @@ void GraphicObject::display(camera cam)
 			{
 				continue;
 			}
-			glm::vec3 screen_vec = graphics_pipeline::to_screen(transformed_vec);
 
 			glTexCoord2f(this->out_uvs.at(i + j).x, this->out_uvs.at(i + j).y);
-			glVertex2f(screen_vec.x, screen_vec.y);
+			glVertex4f(transformed_vec.x, transformed_vec.y, transformed_vec.z, transformed_vec.w);
+			//glm::vec3 screen_vec = graphics_pipeline::to_screen(transformed_vec);
+			//glVertex2f(screen_vec.x, screen_vec.y);
 		}
 
 		glEnd();

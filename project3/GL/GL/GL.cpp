@@ -165,7 +165,6 @@ void setupWindow(int argc, char** argv,
 /********************************/
 void draw() 
 {
-	/*  clear all pixels  */	
 	graphics_pipeline::combinePipeline();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
@@ -173,6 +172,8 @@ void draw()
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{

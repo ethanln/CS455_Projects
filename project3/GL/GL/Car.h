@@ -14,5 +14,4 @@ class Car : public GraphicObject {
 		void turnCar(float _orientation);
 
 		void moveCar(float rate);
-		//virtual void display(camera cam) override;
 };
