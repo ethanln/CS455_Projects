@@ -9,9 +9,8 @@ GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_po
 {
 	// parse obj file.
 	ObjectParser* parser = new ObjectParser();
-	parser->parse(_object_uri, this->faces);
-
-	//this->initializeVertexData(_object_uri);
+	//parser->parse(_object_uri, this->faces);
+	parser->parse(_object_uri, this->out_vertices, this->out_uvs, this->out_normals);
 
 	this->orientation = _orientation;
 	this->x_pos = _x_pos;
@@ -28,18 +27,6 @@ GraphicObject::GraphicObject(string _object_uri, float _orientation, float _x_po
 vector<face> GraphicObject::getObjectFaces()
 {
 	return this->faces;
-}
-
-void GraphicObject::initializeVertexData(string _object_uri)
-{
-	ObjectParser* parser = new ObjectParser();
-	parser->parse(_object_uri);
-
-	this->objectVertexArrayData = parser->get_vertex_data_array();
-	this->objectVertexIndices = parser->get_vertex_index_array();
-
-	this->objectUVArrayData = parser->get_uv_data_array();
-	this->objectUVIndices = parser->get_uv_index_array();
 }
 
 bool GraphicObject::loadTexture(string _texture_uri) {
@@ -142,31 +129,17 @@ bool GraphicObject::loadTexture(string _texture_uri) {
 	return true;
 }
 
-bool GraphicObject::buildBuffer()
-{
-	glGenBuffers(1, &this->objectBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, this->objectBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(this->objectVertexArrayData), this->objectVertexArrayData, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	
-	// DRAW:
-	glDrawArrays(GL_TRIANGLES, 0, sizeof(this->objectVertexArrayData));
-	return true;
-}
-
-void GraphicObject::display(camera cam)
+/*void GraphicObject::display(camera cam)
 {
 	this->setup_object_transformation();
 
 	for (unsigned int i = 0; i < this->objects.size(); i++)
 	{
 		this->objects.at(i)->display(cam);
-	}
+	}*/
 
-	/* TEXTURES SETUP */
-	glEnable(GL_BLEND);
+	/*SETUP TEXTURES*/
+	/*glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, this->texId);
@@ -194,6 +167,42 @@ void GraphicObject::display(camera cam)
 	glFlush();
 
 	glDisable(GL_TEXTURE_2D);
+
+	this->inverse_object_transformation();						// inverse object transformation.
+}*/
+
+void GraphicObject::display(camera cam)
+{
+	this->setup_object_transformation();						// push object transformation within this instance
+
+	for (unsigned int i = 0; i < this->objects.size(); i++)
+	{
+		this->objects.at(i)->display(cam);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, this->texId);
+
+	for (unsigned int i = 0; i < this->out_vertices.size(); i += 3)
+	{
+		glBegin(GL_TRIANGLES);
+		
+		for (unsigned int j = 0; j < 3; j++)
+		{
+			glm::vec4 vec(this->out_vertices.at(i + j).x, this->out_vertices.at(i + j).y, this->out_vertices.at(i + j).z, 1.0f);
+			glm::vec4 transformed_vec = graphics_pipeline::transform(vec);
+
+			if (transformed_vec.w < 0) 
+			{
+				continue;
+			}
+			glm::vec3 screen_vec = graphics_pipeline::to_screen(transformed_vec);
+
+			glTexCoord2f(this->out_uvs.at(i + j).x, this->out_uvs.at(i + j).y);
+			glVertex2f(screen_vec.x, screen_vec.y);
+		}
+
+		glEnd();
+	}
 
 	this->inverse_object_transformation();						// inverse object transformation.
 }
@@ -285,6 +294,11 @@ void GraphicObject::inverse_object_transformation()
 	graphics_pipeline::scale(1.0f / this->scale_x, 1.0f / this->scale_y, 1.0f / this->scale_z);
 	graphics_pipeline::rotate(-((this->orientation * M_PI) / 180.0f), 0.0f, 1.0f, 0.0f);
 	graphics_pipeline::translate(-this->x_pos, -this->y_pos, -this->z_pos);
+}
+
+GraphicObjectType GraphicObject::getType()
+{
+	return this->type;
 }
 
 GraphicObject::~GraphicObject()

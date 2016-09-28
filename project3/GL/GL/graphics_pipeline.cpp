@@ -62,13 +62,11 @@ void graphics_pipeline::_mode(matrix_mode mode)
 
 void graphics_pipeline::_pushMatrix(matrix4 matrix)
 {
-	// TODO: TEST
 	this->current_matrix->multiplyMatrix(matrix);
 }
 
 void graphics_pipeline::_loadIdentityMatrix()
 {
-	// TODO: TEST
 	this->current_matrix->loadIdentity();
 }
 
@@ -214,6 +212,13 @@ void graphics_pipeline::_gluPerspective(float fov, float aspect, float near, flo
 	this->current_matrix->multiplyMatrix(mat);*/
 }
 
+void graphics_pipeline::_combinePipeline()
+{
+	matrix4 proj = this->_getProjectionMatrix();
+	proj.multiplyMatrix(this->getModelViewMatrix());
+	this->modelview->setMatrix(proj.getMatrix());
+}
+
 // MAY WANT TO DELETE THIS SECTION OF CODE
 matrix4 graphics_pipeline::_glhFrustumf(float left, float right, float bottom, float top, float znear, float zfar)
 {
@@ -235,30 +240,24 @@ matrix4 graphics_pipeline::_glhFrustumf(float left, float right, float bottom, f
 
 matrix4 graphics_pipeline::_getPipeline()
 {
-	// TODO: TEST
 	matrix4 pipeline = *this->projection;
 	pipeline.multiplyMatrix(*this->modelview);
-	//matrix4 s(pipeline.getMatrix());
 	return pipeline;
 }
 
 matrix4 graphics_pipeline::_getModelViewMatrix()
 {
-	// TODO: TEST
 	return *this->modelview;
 }
 
 matrix4 graphics_pipeline::_getProjectionMatrix() 
 {
-	// TODO: TEST
 	return *this->projection;
 }
 
 glm::vec4 graphics_pipeline::_transform(glm::vec4 coordinates)
 {
-	// I THINK I JUST WANT TO RETURN A VEC 4 VALUE, OR CONVERT IT TO SCREEN ON THIS METHODS
-	matrix4 pipeline = this->_getPipeline();
-	return pipeline.transform(coordinates);
+	return this->modelview->transform(coordinates);
 }
 
 glm::vec3 graphics_pipeline::_to_screen(glm::vec4 transformed_coordinates)
@@ -321,6 +320,11 @@ void graphics_pipeline::scale(float scale_x, float scale_y, float scale_z)
 void graphics_pipeline::gluPerspective(float fov, float aspect, float near, float far)
 {
 	graphics_pipeline::instance()->_gluPerspective(fov, aspect, near, far);
+}
+
+void graphics_pipeline::combinePipeline()
+{
+	graphics_pipeline::instance()->_combinePipeline();
 }
 
 matrix4 graphics_pipeline::getPipeline()

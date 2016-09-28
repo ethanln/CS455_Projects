@@ -35,11 +35,14 @@ int midWindowY = windowHeight / 2;         // Middle of the window vertically
 
 GLfloat movementSpeedFactor = 1.00f;
 
+Car* car;
+
 
 /********************************/
 /*	     DECLARED METHODS		*/
 /********************************/
 
+void buildScene();
 void init(int argc, char** argv);
 void updateView();
 
@@ -62,24 +65,8 @@ int main(int argc, char **argv)
 	// SET UP:
 	init(argc, argv);
 
-	// SET UP OBJECTS:
-    //objects.push_back(ObjectFactory::make_object(20.0f, 10.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, GraphicObjectType::CRAYON_BOX));
-
-	GraphicObject* car = ObjectFactory::make_object(60.0f, -2.5f, 0.0f, -7.50f, 1.0f, 1.0f, 1.0f, GraphicObjectType::CAR);
-	car->add_object(ObjectFactory::make_object(0.0f, 0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f, GraphicObjectType::WHEEL));
-	car->add_object(ObjectFactory::make_object(0.0f, 0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f, GraphicObjectType::WHEEL));
-
-	car->add_object(ObjectFactory::make_object(180.0f, -0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f, GraphicObjectType::WHEEL));
-	car->add_object(ObjectFactory::make_object(180.0f, -0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f, GraphicObjectType::WHEEL));
-
-	GraphicObject* parking_lot = ObjectFactory::make_object(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, GraphicObjectType::PARKING_LOT);
-
-	parking_lot->add_object(car);
-	objects.push_back(parking_lot);
-
-
-	//objects.push_back(createObject("objects/crayonbox.obj", "objects/CrayonBox2.bmp", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
-	//objects.push_back(createObject("objects/crayonbox-different.obj", "objects/CrayonBox2.bmp", 0.0f, 0.0f, 5.0f, 0.0f, 1.0f, 1.0f, 1.0f));
+	// BUILD SCENE
+	buildScene();
 
 	// SET UP EVENT HANDLERS:
 	glutKeyboardFunc(GLKeyDowns);
@@ -95,6 +82,25 @@ int main(int argc, char **argv)
 }
 
 /********************************/
+/*			BUILD SCENE			*/
+/********************************/
+void buildScene()
+{
+	car = (Car*)ObjectFactory::make_object(60.0f, -2.5f, 0.0f, -7.50f, 1.0f, 1.0f, 1.0f, GraphicObjectType::CAR);
+	car->add_object(ObjectFactory::make_wheel_object(0.0f, 0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f, WheelType::BACK_RIGHT));
+	car->add_object(ObjectFactory::make_wheel_object(0.0f, 0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f, WheelType::FRONT_RIGHT));
+
+	car->add_object(ObjectFactory::make_wheel_object(180.0f, -0.4f, 0.15f, 0.47f, 0.25f, 0.25f, 0.25f, WheelType::BACK_LEFT));
+	car->add_object(ObjectFactory::make_wheel_object(180.0f, -0.4f, 0.15f, -0.54f, 0.25f, 0.25f, 0.25f, WheelType::FRONT_LEFT));
+	car->add_object(ObjectFactory::make_object(90.0f, 0.0f, 0.55f, 0.0f, 0.1f, 0.1f, 0.1f, GraphicObjectType::CREATURE));
+
+	GraphicObject* parking_lot = ObjectFactory::make_object(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, GraphicObjectType::PARKING_LOT);
+
+	parking_lot->add_object(car);
+	objects.push_back(parking_lot);
+}
+
+/********************************/
 /*			   INIT				*/		
 /********************************/
 void init(int argc, char** argv)
@@ -106,22 +112,13 @@ void init(int argc, char** argv)
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	/*  initialize viewing values */
-	//cam = new camera(-83.0f, -18.0683861f, -1.5f, 4.20296192f); // FRONT SIDE
-	cam = new camera(0.0f, -61.0f, 0.0f, -13.7698536f, -1.50000000f, -2.26709294f); // BACK SIDE
-	//cam = new camera(-154.0f, -7.16747618f, -1.50000000f, 24.7994404f); // RIGHT SIDE
-	//cam = new camera(24.0000000f, 11.7560806f, -1.50000000f, -7.81740808f); // LEFT SIDE
-
-	//cam = new camera(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -20.0f);
+	cam = new camera(0.0999973565f, 30.7999935f, 0.0f, 7.20559216f, -0.653922081f, -0.283143580f); // BACK SIDE
 
 	/* BEGIN MY PIPELINE */
 	graphics_pipeline::mode(matrix_mode::PROJECTION_GL);
 	graphics_pipeline::loadIdentityMatrix();
 	graphics_pipeline::gluPerspective(45.0f, 1280.0f / 960.0f, 0.01f, 1000.0f);
 	/* END MY PIPELINE */
-
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//gluPerspective(45.0f, 1280.0f / 960.0f, 0.000001f, 1000.0f);
 
 	updateView();
 
@@ -137,12 +134,6 @@ void init(int argc, char** argv)
 /********************************/
 void updateView()
 {
-	/* intialize camera view*/
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
-	//glRotatef(((cam->getOrientation() * M_PIs) / 180), 0.0f, 1.0f, 0.0f);
-	//glTranslated(cam->getCamX(), cam->getCamY(), cam->getCamZ());
-
 	/* BEGIN MY PIPELINE */
 	graphics_pipeline::mode(matrix_mode::MODELVIEW_GL);
 	graphics_pipeline::loadIdentityMatrix();
@@ -174,13 +165,23 @@ void setupWindow(int argc, char** argv,
 /********************************/
 void draw() 
 {
-	/*  clear all pixels  */
+	/*  clear all pixels  */	
+	graphics_pipeline::combinePipeline();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects.at(i)->display(*cam);														/*Draw object*/
 	}
+
+	glFlush();
+
+	glDisable(GL_TEXTURE_2D);
 	glutSwapBuffers();
 }
 
@@ -288,6 +289,17 @@ void GLKeyDowns(unsigned char key, int x, int y)
 	cam->setCamX(cam->getCamX() + camXSpeed);
 	cam->setCamY(cam->getCamY() + camYSpeed);
 	cam->setCamZ(cam->getCamZ() + camZSpeed);
+
+	//TURN WHEEL LEFT
+	if (key == 'q')
+	{
+		car->turnCar(10.0f);
+	}
+	// TURN WHEEL RIGHT
+	if (key == 'e')
+	{
+		car->turnCar(-10.0f);
+	}
 
 	updateView();
 	draw();

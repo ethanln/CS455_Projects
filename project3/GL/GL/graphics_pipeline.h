@@ -39,6 +39,8 @@ class graphics_pipeline
 
 		void _gluPerspective(float fov, float aspect, float near, float far);
 
+		void _combinePipeline();
+
 		matrix4 _glhFrustumf(float left, float right, float bottom, float top, float znear, float zfar);
 
 		matrix4 _getPipeline();
@@ -66,6 +68,8 @@ class graphics_pipeline
 		static void scale(float scale_x, float scale_y, float scale_z);
 
 		static void gluPerspective(float fov, float aspect, float near, float far);
+
+		static void combinePipeline();
 
 		static matrix4 getPipeline();
 
