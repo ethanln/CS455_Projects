@@ -15,6 +15,7 @@
 #include "ObjectParser.h"
 #include "SOIL.h"
 #include "camera.h"
+#include "math_ext.h"
 
 using namespace std;
 

@@ -1,17 +1,8 @@
-﻿Build started 9/28/2016 12:50:10 PM.
+﻿Build started 10/1/2016 11:15:46 AM.
      1>Project "C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\GL\GL.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/include/ /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Simple OpenGL Image Library\src" /IC:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\glm /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut" /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\glew-1.11.0\include" /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\freeglut\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\GL.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Car.cpp GL.cpp GraphicObject.cpp ObjectFactory.cpp Wheel.cpp
-         GraphicObject.cpp
-     1>c:\users\ethan\desktop\fall2016\cs_455\project3\gl\gl\graphicobject.cpp(6): warning C4305: 'initializing': truncation from 'double' to 'float'
-     1>c:\users\ethan\desktop\fall2016\cs_455\project3\gl\gl\graphicobject.cpp(33): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-         GL.cpp
-     1>c:\users\ethan\desktop\fall2016\cs_455\project3\gl\gl\gl.cpp(26): warning C4305: 'initializing': truncation from 'double' to 'float'
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/include/ /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Simple OpenGL Image Library\src" /IC:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\glm /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut" /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\glew-1.11.0\include" /I"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\freeglut\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\GL.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Car.cpp
          Car.cpp
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         Wheel.cpp
-         ObjectFactory.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\Debug\GL.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Simple OpenGL Image Library\lib" /LIBPATH:C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\glm /LIBPATH:"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\glew-1.11.0\lib" /LIBPATH:"C:\Users\Ethan\Desktop\Fall2016\cs455\project2_4\Glew and Glut\freeglut\lib" C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/Win32\glew32.lib C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/Win32\glfw3dll.lib C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/Win32\freeglut.lib opengl32.lib glu32.lib freeglut.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\Debug\GL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ethan\Desktop\Fall2016\CS_455\project3\GL\Debug\GL.lib" /MACHINE:X86 Debug\camera.obj
          Debug\Car.obj
@@ -31,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.06
+Time Elapsed 00:00:01.32

@@ -33,7 +33,7 @@ int windowHeight = 1000;                    // Heightof our window
 int midWindowX = windowWidth / 2;         // Middle of the window horizontally
 int midWindowY = windowHeight / 2;         // Middle of the window vertically
 
-GLfloat movementSpeedFactor = 1.00f;
+GLfloat movementSpeedFactor = 0.50f;
 
 Car* car;
 
@@ -300,6 +300,11 @@ void GLKeyDowns(unsigned char key, int x, int y)
 	if (key == 'e')
 	{
 		car->turnCar(-10.0f);
+	}
+
+	if (key == 'm')
+	{
+		car->moveCar(2.0f);
 	}
 
 	updateView();
