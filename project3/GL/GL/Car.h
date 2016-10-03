@@ -13,5 +13,9 @@ class Car : public GraphicObject {
 
 		void turnCar(float _orientation);
 
-		void moveCar(float rate);
+		void moveCarForward(float rate);
+
+		void moveCarBackward(float rate);
+
+		float getWheelDirection();
 };

@@ -53,6 +53,7 @@ void setupWindow(int argc, char** argv,																																					/* s
 
 void draw();																																											/* Draw all objects. */
 void GLKeyDowns(unsigned char key, int x, int y);																																		/* Keyboard event handler. */
+void handleArrowKeypress(int key, int x, int y);
 void GLMouseMovements(int x, int y);																																					/* Mouse movement event handler*/
 
 
@@ -70,6 +71,7 @@ int main(int argc, char **argv)
 
 	// SET UP EVENT HANDLERS:
 	glutKeyboardFunc(GLKeyDowns);
+	glutSpecialFunc(handleArrowKeypress);
 	glutMotionFunc(GLMouseMovements);
 
 	// INITIATE DRAW:
@@ -290,23 +292,28 @@ void GLKeyDowns(unsigned char key, int x, int y)
 	cam->setCamX(cam->getCamX() + camXSpeed);
 	cam->setCamY(cam->getCamY() + camYSpeed);
 	cam->setCamZ(cam->getCamZ() + camZSpeed);
+	
+	updateView();
+	draw();
+}
 
-	//TURN WHEEL LEFT
-	if (key == 'q')
+void handleArrowKeypress(int key, int x, int y)
+{
+	switch (key)
 	{
-		car->turnCar(10.0f);
+		case GLUT_KEY_UP:
+			car->moveCarForward(0.15f);
+			break;
+		case GLUT_KEY_DOWN:
+			car->moveCarBackward(0.15f);
+			break;
+		case GLUT_KEY_LEFT:
+			car->turnCar(5.0f);
+			break;
+		case GLUT_KEY_RIGHT:
+			car->turnCar(-5.0f);
+			break;
 	}
-	// TURN WHEEL RIGHT
-	if (key == 'e')
-	{
-		car->turnCar(-10.0f);
-	}
-
-	if (key == 'm')
-	{
-		car->moveCar(2.0f);
-	}
-
 	updateView();
 	draw();
 }
