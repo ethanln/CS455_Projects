@@ -1,0 +1,4 @@
+sceneSetups:
+- path: New Unity Project/Assets/Scenes/level1-test.unity
+  isLoaded: 1
+  isActive: 1
