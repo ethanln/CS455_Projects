@@ -9,7 +9,8 @@ public class MisslePivotController : MonoBehaviour {
     public float gizmoSize = 60.75f;
     public Color gizmoColor = Color.yellow;
 
-    public GameObject boundary;
+    public GameObject monster_boundary;
+    public GameObject terrain_boundaries;
 
     public Text timer;
 
@@ -35,14 +36,15 @@ public class MisslePivotController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.checkCollision();
+        
 
         if (this.isLaunched)
         {
+            this.checkMonsterCollision();
+            this.checkTerrainCollision();
             this.updateTimer();
+            this.checkTimer();
         }
-
-        this.checkTimer();
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -106,12 +108,25 @@ public class MisslePivotController : MonoBehaviour {
         }
     }
 
-    private void checkCollision()
+    private void checkMonsterCollision()
     {
-        SphereCollider collider = this.boundary.GetComponent<SphereCollider>();
+        SphereCollider collider = this.monster_boundary.GetComponent<SphereCollider>();
         if (collider.bounds.Contains(this.transform.position))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    private void checkTerrainCollision()
+    {
+        for(int i = 0; i < this.terrain_boundaries.transform.childCount; i++)
+        {
+            GameObject border = this.terrain_boundaries.transform.GetChild(i).gameObject;
+            BoxCollider box = border.GetComponent<BoxCollider>();
+            if (box.bounds.Contains(this.transform.position))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 }
