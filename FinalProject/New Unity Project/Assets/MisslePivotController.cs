@@ -32,6 +32,7 @@ public class MisslePivotController : MonoBehaviour {
         this.initial_hor_rotation = this.transform.rotation.x;
         this.initial_ver_rotation = this.transform.rotation.y;
         this.timer.text = "30:00";
+        this.timer.fontSize = 20;
     }
 	
 	// Update is called once per frame
@@ -41,7 +42,7 @@ public class MisslePivotController : MonoBehaviour {
         if (this.isLaunched)
         {
             this.checkMonsterCollision();
-            this.checkTerrainCollision();
+            //this.checkTerrainCollision();
             this.updateTimer();
             this.checkTimer();
         }
@@ -97,7 +98,12 @@ public class MisslePivotController : MonoBehaviour {
     {
         float dTime = Time.deltaTime;
         float newTime = (float)Convert.ToDouble(this.timer.text.Replace(':', '.')) - dTime;
-        this.timer.text = Convert.ToString(newTime).Replace('.', ':');
+        this.timer.text = newTime.ToString("F").Replace('.', ':');
+
+        if ((float)Convert.ToDouble(this.timer.text.Replace(':', '.')) - dTime <= 5.0)
+        {
+            this.timer.color = Color.red;
+        }
     }
 
     private void checkTimer()
@@ -117,7 +123,7 @@ public class MisslePivotController : MonoBehaviour {
         }
     }
 
-    private void checkTerrainCollision()
+    /*private void checkTerrainCollision()
     {
         for(int i = 0; i < this.terrain_boundaries.transform.childCount; i++)
         {
@@ -128,5 +134,5 @@ public class MisslePivotController : MonoBehaviour {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
-    }
+    }*/
 }
