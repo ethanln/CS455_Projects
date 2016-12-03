@@ -31,7 +31,7 @@ public class MisslePivotController : MonoBehaviour {
         this.isLaunched = false;
         this.initial_hor_rotation = this.transform.rotation.x;
         this.initial_ver_rotation = this.transform.rotation.y;
-        this.timer.text = "30:00";
+        this.timer.text = "45:00";
         this.timer.fontSize = 20;
     }
 	
