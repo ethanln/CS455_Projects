@@ -15,8 +15,8 @@ public class MisslePivotController : MonoBehaviour {
     private string timer_header;
     private string current_time;
     
-    private float turnSpeed = 100f;
-    private float rocketSpeed = 700f;
+    private float turnSpeed = 100.0f;
+    private float rocketSpeed = 5.0f;
 
     private float pre_launch_rotate_max_horizontal = 3.0f;
     private float pre_launch_rotate_max_vertical = 20.0f;
