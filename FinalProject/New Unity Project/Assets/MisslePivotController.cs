@@ -10,11 +10,11 @@ public class MisslePivotController : MonoBehaviour {
     public Color gizmoColor = Color.yellow;
 
     public GameObject monster_boundary;
-    public GameObject terrain_boundaries;
 
     public Text timer;
-
-    private float moveSpeed = 10f;
+    private string timer_header;
+    private string current_time;
+    
     private float turnSpeed = 100f;
     private float rocketSpeed = 700f;
 
@@ -31,7 +31,12 @@ public class MisslePivotController : MonoBehaviour {
         this.isLaunched = false;
         this.initial_hor_rotation = this.transform.rotation.x;
         this.initial_ver_rotation = this.transform.rotation.y;
-        this.timer.text = "45:00";
+
+
+        this.timer_header = "Timer: ";
+        this.current_time = "45:00";
+
+        this.timer.text = this.timer_header + this.current_time;
         this.timer.fontSize = 20;
     }
 	
@@ -42,7 +47,6 @@ public class MisslePivotController : MonoBehaviour {
         if (this.isLaunched)
         {
             this.checkMonsterCollision();
-            //this.checkTerrainCollision();
             this.updateTimer();
             this.checkTimer();
         }
@@ -81,6 +85,7 @@ public class MisslePivotController : MonoBehaviour {
         {
             this.isLaunched = true;
         }
+        
 
         if (isLaunched)
         {
@@ -97,10 +102,11 @@ public class MisslePivotController : MonoBehaviour {
     private void updateTimer()
     {
         float dTime = Time.deltaTime;
-        float newTime = (float)Convert.ToDouble(this.timer.text.Replace(':', '.')) - dTime;
-        this.timer.text = newTime.ToString("F").Replace('.', ':');
+        float newTime = (float)Convert.ToDouble(this.current_time.Replace(':', '.')) - dTime;
+        this.current_time = newTime.ToString("F").Replace('.', ':');
+        this.timer.text = this.timer_header + this.current_time;
 
-        if ((float)Convert.ToDouble(this.timer.text.Replace(':', '.')) - dTime <= 5.0)
+        if ((float)Convert.ToDouble(this.current_time.Replace(':', '.')) - dTime <= 5.0)
         {
             this.timer.color = Color.red;
         }
@@ -108,7 +114,7 @@ public class MisslePivotController : MonoBehaviour {
 
     private void checkTimer()
     {
-        if((float)Convert.ToDouble(this.timer.text.Replace(':', '.')) <= 0.0f)
+        if((float)Convert.ToDouble(this.current_time.Replace(':', '.')) <= 0.0f)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -122,17 +128,4 @@ public class MisslePivotController : MonoBehaviour {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
-
-    /*private void checkTerrainCollision()
-    {
-        for(int i = 0; i < this.terrain_boundaries.transform.childCount; i++)
-        {
-            GameObject border = this.terrain_boundaries.transform.GetChild(i).gameObject;
-            BoxCollider box = border.GetComponent<BoxCollider>();
-            if (box.bounds.Contains(this.transform.position))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
-        }
-    }*/
 }
