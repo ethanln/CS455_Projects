@@ -18,7 +18,13 @@ public class TerrainCollisionScript : MonoBehaviour {
     {
         if (col.gameObject.name == "missle_pivot")
         {
+            MisslePivotController.rocketSpeed = 2.0f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+       
+        if(col.gameObject.name == "bomb_prefab(Clone)")
+        {
+            Destroy(col.gameObject);
         }
     }
 }

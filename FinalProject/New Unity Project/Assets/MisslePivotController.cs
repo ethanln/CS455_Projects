@@ -16,15 +16,15 @@ public class MisslePivotController : MonoBehaviour {
     private string current_time;
     
     private float turnSpeed = 100.0f;
-    private float rocketSpeed = 5.0f;
-
-    private float pre_launch_rotate_max_horizontal = 3.0f;
-    private float pre_launch_rotate_max_vertical = 20.0f;
+    public static float rocketSpeed = 2.0f;
 
     private float initial_hor_rotation;
     private float initial_ver_rotation;
 
     private bool isLaunched;
+
+    public static Vector3 lastPlanePos;
+    public static Vector3 currentPlaneVelocity;
 
     // Use this for initialization
     void Start () {
@@ -38,58 +38,58 @@ public class MisslePivotController : MonoBehaviour {
 
         this.timer.text = this.timer_header + this.current_time;
         this.timer.fontSize = 20;
+
+        MisslePivotController.lastPlanePos = this.transform.position;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
 
         if (this.isLaunched)
         {
             this.checkMonsterCollision();
             this.updateTimer();
             this.checkTimer();
-        }
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Rotate(Vector3.down, -this.turnSpeed * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            transform.Rotate(Vector3.down, this.turnSpeed * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(Vector3.right, this.turnSpeed * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            if (!this.isLaunched)
+
+            if (Input.GetKey(KeyCode.W))
             {
-                if( Math.Abs(transform.rotation.x + this.initial_hor_rotation) + this.turnSpeed * Time.deltaTime > this.pre_launch_rotate_max_horizontal)
-                {
-                    //transform.Rotate(Vector3.left, 0.0f);
-                }
-                else
-                {
-                    transform.Rotate(Vector3.left, this.turnSpeed * Time.deltaTime);
-                }
+                MisslePivotController.rocketSpeed += 0.1f;
             }
-            else
-            { 
+            if (Input.GetKey(KeyCode.S))
+            {
+                MisslePivotController.rocketSpeed -= 0.1f;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(0.0f, 0.0f, (this.turnSpeed * Time.deltaTime));
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(0.0f, 0.0f, -(this.turnSpeed * Time.deltaTime));
+            }
+            if (Input.GetAxis("Mouse Y") < 0)
+            {
+                transform.Rotate(Vector3.down, this.turnSpeed * Time.deltaTime);
+            }
+            if (Input.GetAxis("Mouse Y") > 0)
+            {
+                transform.Rotate(Vector3.down, -this.turnSpeed * Time.deltaTime);
+            }
+            if (Input.GetAxis("Mouse X") < 0)
+            {
+                transform.Rotate(Vector3.right, this.turnSpeed * Time.deltaTime);
+            }
+            if(Input.GetAxis("Mouse X") > 0)
+            {
                 transform.Rotate(Vector3.left, this.turnSpeed * Time.deltaTime);
             }
+
+            transform.Translate(Vector3.forward * rocketSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.Space) && !this.isLaunched)
         {
             this.isLaunched = true;
-        }
-        
-
-        if (isLaunched)
-        {
-            transform.Translate(Vector3.forward * rocketSpeed * Time.deltaTime);
         }
     }
 
@@ -116,6 +116,7 @@ public class MisslePivotController : MonoBehaviour {
     {
         if((float)Convert.ToDouble(this.current_time.Replace(':', '.')) <= 0.0f)
         {
+            MisslePivotController.rocketSpeed = 2.0f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
@@ -125,7 +126,26 @@ public class MisslePivotController : MonoBehaviour {
         SphereCollider collider = this.monster_boundary.GetComponent<SphereCollider>();
         if (collider.bounds.Contains(this.transform.position))
         {
+            MisslePivotController.rocketSpeed = 2.0f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+
+        if (col.gameObject.name == "bomb_prefab")
+        {
+            return;
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+
+        if (col.gameObject.name == "bomb_prefab")
+        {
+            return;
         }
     }
 }
