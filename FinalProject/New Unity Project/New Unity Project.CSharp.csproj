@@ -85,6 +85,7 @@
     <Compile Include="Assets\ExplosionBehavior.cs" />
     <Compile Include="Assets\MissleController.cs" />
     <Compile Include="Assets\MisslePivotController.cs" />
+    <Compile Include="Assets\MonsterCollision.cs" />
     <Compile Include="Assets\TerrainCollisionScript.cs" />
     <Compile Include="Assets\TerrainScript.cs" />
   </ItemGroup>

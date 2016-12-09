@@ -37,7 +37,6 @@ public class MisslePivotController : MonoBehaviour {
         this.current_time = "45:00";
 
         this.timer.text = this.timer_header + this.current_time;
-        this.timer.fontSize = 20;
 
         MisslePivotController.lastPlanePos = this.transform.position;
     }
@@ -123,7 +122,7 @@ public class MisslePivotController : MonoBehaviour {
 
     private void checkMonsterCollision()
     {
-        SphereCollider collider = this.monster_boundary.GetComponent<SphereCollider>();
+        CapsuleCollider collider = this.monster_boundary.GetComponent<CapsuleCollider>();
         if (collider.bounds.Contains(this.transform.position))
         {
             MisslePivotController.rocketSpeed = 2.0f;
