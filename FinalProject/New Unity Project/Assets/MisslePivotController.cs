@@ -22,23 +22,33 @@ public class MisslePivotController : MonoBehaviour {
     private float initial_ver_rotation;
 
     private bool isLaunched;
+    private float camera_toggle_delay;
 
-    public static Vector3 lastPlanePos;
-    public static Vector3 currentPlaneVelocity;
+    public static Vector3 lastPlayerPos;
+    public static Vector3 currentPlayerPos;
+
+    // cameras:
+    public Camera main_cam;
+    public Camera bomb_cam;
 
     // Use this for initialization
     void Start () {
         this.isLaunched = false;
+        this.camera_toggle_delay = 0.0f;
+
         this.initial_hor_rotation = this.transform.rotation.x;
         this.initial_ver_rotation = this.transform.rotation.y;
-
 
         this.timer_header = "Timer: ";
         this.current_time = "45:00";
 
         this.timer.text = this.timer_header + this.current_time;
 
-        MisslePivotController.lastPlanePos = this.transform.position;
+        MisslePivotController.lastPlayerPos = this.transform.position;
+        MisslePivotController.currentPlayerPos = this.transform.position;
+
+        this.main_cam.enabled = true;
+        this.bomb_cam.enabled = false;
     }
 	
 	// Update is called once per frame
@@ -50,7 +60,14 @@ public class MisslePivotController : MonoBehaviour {
             this.updateTimer();
             this.checkTimer();
 
+            this.camera_toggle_delay += Time.deltaTime;
 
+            if (Input.GetKey(KeyCode.Q) && this.camera_toggle_delay >= 0.2f)
+            {
+                this.camera_toggle_delay = 0.0f;
+                this.bomb_cam.enabled = !this.bomb_cam.enabled;
+                this.main_cam.enabled = !this.main_cam.enabled;
+            }
             if (Input.GetKey(KeyCode.W))
             {
                 MisslePivotController.rocketSpeed += 0.1f;
@@ -90,6 +107,10 @@ public class MisslePivotController : MonoBehaviour {
         {
             this.isLaunched = true;
         }
+
+        // update plane position
+        MisslePivotController.lastPlayerPos = currentPlayerPos;
+        MisslePivotController.currentPlayerPos = this.transform.position;
     }
 
     void OnDrawGizmo()
