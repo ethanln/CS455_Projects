@@ -85,6 +85,7 @@
     <Compile Include="Assets\BombScript.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\ExplosionBehavior.cs" />
+    <Compile Include="Assets\LevelTitleAnimateScript.cs" />
     <Compile Include="Assets\MissleController.cs" />
     <Compile Include="Assets\MisslePivotController.cs" />
     <Compile Include="Assets\MonsterCollision.cs" />
