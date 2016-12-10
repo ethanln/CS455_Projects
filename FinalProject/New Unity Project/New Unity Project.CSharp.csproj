@@ -80,6 +80,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AcidLaunchScript.cs" />
+    <Compile Include="Assets\AcidScript.cs" />
     <Compile Include="Assets\BombScript.cs" />
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\ExplosionBehavior.cs" />
