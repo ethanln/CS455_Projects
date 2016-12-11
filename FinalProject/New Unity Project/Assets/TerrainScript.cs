@@ -20,7 +20,7 @@ public class TerrainScript : MonoBehaviour {
 	void Update () {
 
         // check if game is over before any action is taken.
-        if (MisslePivotController.isGameOver)
+        if (MisslePivotController.isGameOver || MisslePivotController.isPause)
         {
             return;
         }

@@ -45,7 +45,7 @@ public class AcidScript : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if(col.tag == "Player")
+        if(col.tag == "Player" && !MisslePivotController.isVictory)
         {
             MisslePivotController.isGameOver = true;
             MisslePivotController.isLoss = true;

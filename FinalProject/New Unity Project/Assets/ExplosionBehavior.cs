@@ -11,6 +11,11 @@ public class ExplosionBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (MisslePivotController.isPause)
+        {
+            return;
+        }
+
         this.transform.localScale = new Vector3(this.transform.localScale.x + 0.005f, this.transform.localScale.y + 0.005f, this.transform.localScale.z + 0.005f);
         if (this.transform.localScale.x > 2.5f ||
                 this.transform.transform.localScale.y > 2.5f ||

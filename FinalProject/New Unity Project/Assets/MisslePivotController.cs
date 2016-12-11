@@ -24,11 +24,14 @@ public class MisslePivotController : MonoBehaviour {
     private bool isLaunched;
     private float camera_toggle_delay;
 
+    private float pause_delay;
+
     public static Vector3 lastPlayerPos;
     public static Vector3 currentPlayerPos;
     public static bool isGameOver = false;
     public static bool isLoss = false;
     public static bool isVictory = false;
+    public static bool isPause = false;
 
     // cameras:
     public Camera main_cam;
@@ -57,7 +60,26 @@ public class MisslePivotController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (MisslePivotController.isGameOver)
+        this.pause_delay += .08f;
+
+        if (Input.GetKey(KeyCode.Tab) 
+            && MisslePivotController.isPause
+            && this.pause_delay >= 1.0f)
+        {
+            MisslePivotController.isPause = false;
+            Time.timeScale = 1.0f;
+            this.pause_delay = 0.0f;
+        }
+        else if(Input.GetKey(KeyCode.Tab) 
+            && !MisslePivotController.isPause
+            && this.pause_delay >= 1.0f)
+        {
+            MisslePivotController.isPause = true;
+            Time.timeScale = 0.0f;
+            this.pause_delay = 0.0f;
+        }
+
+        if (MisslePivotController.isGameOver || MisslePivotController.isPause)
         {
             return;
         }
