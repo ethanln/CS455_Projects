@@ -18,6 +18,13 @@ public class TerrainScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        // check if game is over before any action is taken.
+        if (MisslePivotController.isGameOver)
+        {
+            return;
+        }
+
         if (this.isLaunched)
         {
             this.bomb_delay += Time.deltaTime;
@@ -43,6 +50,12 @@ public class TerrainScript : MonoBehaviour {
 
                 // disable collision events for all explosions
                 foreach (GameObject b in GameObject.FindGameObjectsWithTag("bomb_explosion"))
+                {
+                    Physics.IgnoreCollision(obj.GetComponent<Collider>(), b.GetComponent<Collider>());
+                }
+
+                // disable collision events for all acid isntances
+                foreach (GameObject b in GameObject.FindGameObjectsWithTag("acid"))
                 {
                     Physics.IgnoreCollision(obj.GetComponent<Collider>(), b.GetComponent<Collider>());
                 }

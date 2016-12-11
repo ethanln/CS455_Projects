@@ -47,9 +47,10 @@ public class AcidScript : MonoBehaviour
     {
         if(col.tag == "Player")
         {
-            MisslePivotController.rocketSpeed = 2.0f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //MisslePivotController.rocketSpeed = 2.0f;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            MisslePivotController.isGameOver = true;
+            MisslePivotController.isLoss = true;
         }
-        string s = "stuff";
     }
 }

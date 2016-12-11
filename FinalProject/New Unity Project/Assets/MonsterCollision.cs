@@ -37,6 +37,8 @@ public class MonsterCollision : MonoBehaviour {
         {
             Destroy(this.transform.gameObject);
             MonsterCollision.monsterIsDead = true;
+            MisslePivotController.isGameOver = true;
+            MisslePivotController.isVictory = true;
         }
     }
 

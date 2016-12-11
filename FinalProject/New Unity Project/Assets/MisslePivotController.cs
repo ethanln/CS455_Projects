@@ -26,6 +26,9 @@ public class MisslePivotController : MonoBehaviour {
 
     public static Vector3 lastPlayerPos;
     public static Vector3 currentPlayerPos;
+    public static bool isGameOver = false;
+    public static bool isLoss = false;
+    public static bool isVictory = false;
 
     // cameras:
     public Camera main_cam;
@@ -47,12 +50,17 @@ public class MisslePivotController : MonoBehaviour {
         MisslePivotController.lastPlayerPos = this.transform.position;
         MisslePivotController.currentPlayerPos = this.transform.position;
 
+
         this.main_cam.enabled = true;
         this.bomb_cam.enabled = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (MisslePivotController.isGameOver)
+        {
+            return;
+        }
 
         if (this.isLaunched)
         {
@@ -136,8 +144,10 @@ public class MisslePivotController : MonoBehaviour {
     {
         if((float)Convert.ToDouble(this.current_time.Replace(':', '.')) <= 0.0f)
         {
-            MisslePivotController.rocketSpeed = 2.0f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //MisslePivotController.rocketSpeed = 2.0f;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            MisslePivotController.isGameOver = true;
+            MisslePivotController.isLoss = true;
         }
     }
 
@@ -146,8 +156,10 @@ public class MisslePivotController : MonoBehaviour {
         CapsuleCollider collider = this.monster_boundary.GetComponent<CapsuleCollider>();
         if (collider.bounds.Contains(this.transform.position))
         {
-            MisslePivotController.rocketSpeed = 2.0f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //MisslePivotController.rocketSpeed = 2.0f;
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            MisslePivotController.isGameOver = true;
+            MisslePivotController.isLoss = true;
         }
     }
 

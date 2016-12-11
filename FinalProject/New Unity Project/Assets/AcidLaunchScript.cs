@@ -18,6 +18,12 @@ public class AcidLaunchScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // check if game is over before any action is taken.
+        if (MisslePivotController.isGameOver)
+        {
+            return;
+        }
+
         if((this.player.transform.position - this.transform.position).magnitude <= this.radius_monster_boundary)
         {
             this.current_launch_delay += Time.deltaTime;
