@@ -32,6 +32,7 @@ public class AcidLaunchScript : MonoBehaviour {
                 this.current_launch_delay = 0.0f;
                 GameObject obj = Instantiate(this.acid_obj, this.gameObject.transform.position, this.gameObject.transform.rotation) as GameObject;
                 Physics.IgnoreCollision(obj.GetComponent<Collider>(), this.player.GetComponent<Collider>());
+                Physics.IgnoreCollision(obj.GetComponent<Collider>(), this.GetComponentInParent<Collider>());
             }
         }
         else

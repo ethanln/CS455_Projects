@@ -52,5 +52,9 @@ public class AcidScript : MonoBehaviour
             MisslePivotController.isGameOver = true;
             MisslePivotController.isLoss = true;
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
