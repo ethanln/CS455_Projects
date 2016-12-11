@@ -18,7 +18,10 @@ public class TerrainCollisionScript : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.name == "missle_pivot")
+        if (col.gameObject.name == "missle_pivot"
+            && !MisslePivotController.isGameOver
+            && !MisslePivotController.isLoss
+            && !MisslePivotController.isVictory)
         {
             MisslePivotController.isGameOver = true;
             MisslePivotController.isLoss = true;

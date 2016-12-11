@@ -92,6 +92,7 @@
     <Compile Include="Assets\MissleController.cs" />
     <Compile Include="Assets\MisslePivotController.cs" />
     <Compile Include="Assets\MonsterCollision.cs" />
+    <Compile Include="Assets\PauseViewScript.cs" />
     <Compile Include="Assets\SpacebarInstructionScript.cs" />
     <Compile Include="Assets\TerrainCollisionScript.cs" />
     <Compile Include="Assets\TerrainScript.cs" />
