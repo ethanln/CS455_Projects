@@ -33,7 +33,8 @@ public class MonsterCollision : MonoBehaviour {
             this.updateMonsterHPHeader();
         }
 
-        if(this.current_hp <= 0.0f)
+        if(this.current_hp <= 0.0f
+            && !MisslePivotController.isGameOver)
         {
             Destroy(this.transform.gameObject);
             MonsterCollision.monsterIsDead = true;

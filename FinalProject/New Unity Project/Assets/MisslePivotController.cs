@@ -37,6 +37,7 @@ public class MisslePivotController : MonoBehaviour {
     // cameras:
     public Camera main_cam;
     public Camera bomb_cam;
+    public Camera side_cam;
 
     // Use this for initialization
     void Start () {
@@ -56,12 +57,18 @@ public class MisslePivotController : MonoBehaviour {
 
         this.main_cam.enabled = true;
         this.bomb_cam.enabled = false;
+        this.side_cam.enabled = false;
 
         this.timeout = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (MisslePivotController.isGameOver)
+        {
+            return;
+        }
+
         this.pause_delay += .08f;
 
         if (Input.GetKey(KeyCode.Tab) 
@@ -81,7 +88,7 @@ public class MisslePivotController : MonoBehaviour {
             this.pause_delay = 0.0f;
         }
 
-        if (MisslePivotController.isGameOver || MisslePivotController.isPause)
+        if (MisslePivotController.isPause)
         {
             return;
         }
@@ -97,8 +104,23 @@ public class MisslePivotController : MonoBehaviour {
             if (Input.GetKey(KeyCode.Q) && this.camera_toggle_delay >= 0.2f)
             {
                 this.camera_toggle_delay = 0.0f;
-                this.bomb_cam.enabled = !this.bomb_cam.enabled;
-                this.main_cam.enabled = !this.main_cam.enabled;
+                this.bomb_cam.enabled = true;
+                this.main_cam.enabled = false;
+                this.side_cam.enabled = false;
+            }
+            if (Input.GetKey(KeyCode.E) && this.camera_toggle_delay >= 0.2f)
+            {
+                this.camera_toggle_delay = 0.0f;
+                this.bomb_cam.enabled = false;
+                this.main_cam.enabled = false;
+                this.side_cam.enabled = true;
+            }
+            if (Input.GetKey(KeyCode.R) && this.camera_toggle_delay >= 0.2f)
+            {
+                this.camera_toggle_delay = 0.0f;
+                this.bomb_cam.enabled = false;
+                this.main_cam.enabled = true;
+                this.side_cam.enabled = false;
             }
             if (Input.GetKey(KeyCode.W))
             {
